@@ -5,6 +5,7 @@ from scraper.items import VintedItem
 
 class VintedSpider(scrapy.Spider):
     name = "vinted"
+    allowed_domains = ["vinted.it"]
 
     def start_requests(self):
         yield scrapy.Request(
