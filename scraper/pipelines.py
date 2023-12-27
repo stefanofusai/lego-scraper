@@ -113,7 +113,7 @@ class ScraperPipeline:
                 },
             )
 
-            if getattr(spider, "load_db", "false") != "true":
+            if spider.load_db is False:
                 await self.bot.send_photo(
                     chat_id=self.CHAT_ID,
                     photo=item["photo"]["url"],

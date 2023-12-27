@@ -10,6 +10,18 @@ class VintedSpider(scrapy.Spider):
         "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first"
     ]
 
+    def __init__(self, load_db=False, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if load_db in {"true", "True"}:
+            self.load_db = True
+
+        elif load_db in {"false", "False"}:
+            self.load_db = False
+
+        else:
+            raise ValueError("load_db must be either true or false")
+
     def start_requests(self):
         yield scrapy.Request(
             "https://www.vinted.it/catalog", callback=self._start_requests
