@@ -14,7 +14,7 @@ class VintedSpider(scrapy.Spider):
 
     def _start_requests(self, response):
         yield scrapy.Request(
-            "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=984&search_text=lego&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=6,1&order=newest_first",
+            "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=6,1&order=newest_first",
             callback=self.parse,
         )
 
@@ -46,12 +46,4 @@ class VintedSpider(scrapy.Spider):
                 status=item["status"],
                 icon_badges=item["icon_badges"],
                 search_tracking_params=item["search_tracking_params"],
-            )
-
-        page_curr = response.json()["pagination"]["current_page"]
-
-        if page_curr < response.json()["pagination"]["total_pages"]:
-            yield scrapy.Request(
-                f"https://www.vinted.it/api/v2/catalog/items?page={page_curr+1}&per_page=984&search_text=lego&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=6,1&order=newest_first",
-                callback=self.parse,
             )

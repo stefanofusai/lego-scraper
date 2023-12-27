@@ -1,6 +1,7 @@
 # Custom
 *.bak
 *.db
+*.db-journal
 **/.DS_Store
 
 # Byte-compiled / optimized / DLL files
