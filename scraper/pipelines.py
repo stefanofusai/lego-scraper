@@ -131,18 +131,18 @@ class ScraperPipeline:
         self.db.close()
 
     def format_message(self, item):
-        message = "🛍️ *New Vinted Item Posted!*\n\n"
-        message += f"*Title:* {item['title']}\n"
-        message += f"*Price:* {item['price']} {item['currency']}\n"
+        message = f"🛍️ [New Item For Sale!]({item['url']})\n\n"
         message += f"*Brand:* {item['brand_title']}\n"
-        message += f"*Status:* {item['status']}\n"
-        message += f"*Size:* {item['size_title']}\n"
-        message += f"*Visible:* {'Yes' if item['is_visible'] else 'No'}\n"
-        message += f"*For Swap:* {'Yes' if item['is_for_swap'] else 'No'}\n"
         message += f"*Favourite Count:* {item['favourite_count']}\n"
-        message += f"*View Count:* {item['view_count']}\n"
-        message += f"*URL:* [Link to Item]({item['url']})\n\n"
+        message += f"*Price:* {item['currency']} {item['price']}\n"
         message += (
-            f"*Posted by:* [{item['user']['login']}]({item['user']['profile_url']})"
+            f"*Price With Service Fee:* {item['currency']} {item['total_item_price']}\n"
         )
+        message += (
+            f"*Seller:* [{item['user']['login']}]({item['user']['profile_url']})\n"
+        )
+        message += f"*Size:* {item['size_title']}\n"
+        message += f"*Status:* {item['status']}\n"
+        message += f"*Title:* {item['title']}\n"
+        message += f"*View Count:* {item['view_count']}\n\n"
         return message
