@@ -6,18 +6,18 @@ from scraper.items import VintedItem
 class VintedSpider(scrapy.Spider):
     name = "vinted"
     allowed_domains = ["vinted.it"]
+    start_urls = [
+        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first"
+    ]
 
     def start_requests(self):
         yield scrapy.Request(
-            "https://www.vinted.it/catalog?search_text=lego&status_ids[]=6&status_ids[]=1",
-            callback=self._start_requests,
+            "https://www.vinted.it/catalog", callback=self._start_requests
         )
 
     def _start_requests(self, response):
-        yield scrapy.Request(
-            "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=6,1&order=newest_first",
-            callback=self.parse,
-        )
+        for url in self.start_urls:
+            yield scrapy.Request(url, callback=self.parse)
 
     def parse(self, response):
         for item in response.json()["items"]:
