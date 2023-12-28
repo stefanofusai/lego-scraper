@@ -7,7 +7,7 @@ class VintedSpider(scrapy.Spider):
     name = "vinted"
     allowed_domains = ["vinted.it"]
     start_urls = [
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first"
+        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=96&search_text=lego&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first"
     ]
 
     def __init__(self, load_db=False, *args, **kwargs):
