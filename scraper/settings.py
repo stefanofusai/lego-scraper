@@ -101,6 +101,7 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
 # Set settings for the scrapy-proxies library
+RETRY_TIMES = 10
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
 PROXY_MODE = 2
 CUSTOM_PROXY = os.environ.get("REQUESTS_PROXY")
