@@ -1,4 +1,8 @@
 import dotenv
+import os
+
+# Load environment variables
+dotenv.load_dotenv()
 
 # Scrapy settings for scraper project
 #
@@ -52,9 +56,11 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    "scraper.middlewares.ScraperDownloaderMiddleware": 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+    "scrapy.downloadermiddlewares.retry.RetryMiddleware": 90,
+    "scrapy_proxies.RandomProxy": 100,
+    "scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware": 110,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -94,5 +100,7 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
-# Load environment variables
-dotenv.load_dotenv()
+# Set settings for the scrapy-proxies library
+RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
+PROXY_MODE = 2
+CUSTOM_PROXY = os.environ.get("REQUESTS_PROXY")
