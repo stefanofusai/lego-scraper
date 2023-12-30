@@ -1,5 +1,4 @@
 import dotenv
-import os
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -56,11 +55,9 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-    "scrapy.downloadermiddlewares.retry.RetryMiddleware": 90,
-    "scrapy_proxies.RandomProxy": 100,
-    "scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware": 110,
-}
+# DOWNLOADER_MIDDLEWARES = {
+#    "scraper.middlewares.ScraperDownloaderMiddleware": 543,
+# }
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -99,9 +96,3 @@ ITEM_PIPELINES = {
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
-
-# Set settings for the scrapy-proxies library
-RETRY_TIMES = 15
-RETRY_HTTP_CODES = [403]
-PROXY_MODE = 2
-CUSTOM_PROXY = os.environ.get("REQUESTS_PROXY")

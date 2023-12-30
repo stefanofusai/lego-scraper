@@ -102,8 +102,6 @@ requests-file==1.5.1
     # via tldextract
 scrapy==2.11.0
     # via -r requirements.in
-scrapy-proxies==0.4
-    # via -r requirements.in
 service-identity==23.1.0
     # via scrapy
 six==1.16.0
