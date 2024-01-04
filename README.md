@@ -1,1 +1,1 @@
-# vinted-scraper
+# lego-scraper

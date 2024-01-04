@@ -6,23 +6,24 @@
 
 # useful for handling different item types with a single interface
 
+from abc import abstractmethod
 import os
 import sqlite3
 
 import telegram
 
 
-class ScraperPipeline:
+class ScraperBasePipeline:
     TOKEN = os.environ.get("TELEGRAM_TOKEN")
     CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
     def __init__(self):
         self.bot = telegram.Bot(token=self.TOKEN)
-        self.db = sqlite3.connect("vinted.db")
+        self.db = sqlite3.connect("db.sqlite3")
 
         cursor = self.db.cursor()
         cursor.execute(
-            """CREATE TABLE IF NOT EXISTS item (
+            """CREATE TABLE IF NOT EXISTS vinted_item (
                 id INTEGER NOT NULL PRIMARY KEY,
                 title TEXT NOT NULL,
                 price REAL NOT NULL,
@@ -49,17 +50,40 @@ class ScraperPipeline:
                 search_tracking_params TEXT NOT NULL
             );"""
         )
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_item_id ON item (id);")
+        cursor.execute(
+            "CREATE INDEX IF NOT EXISTS idx_vinted_item_id ON vinted_item (id);"
+        )
         cursor.close()
 
+    def close_spider(self, spider):
+        self.db.commit()
+        spider.logger.info(f"Inserted {self.db.total_changes} items")
+        self.db.close()
+
+    async def send_telegram_notification(self, spider, item, *, photo):
+        if spider.load_db is False:
+            await self.bot.send_photo(
+                chat_id=self.CHAT_ID,
+                photo=photo,
+                caption=self.format_message(item),
+                parse_mode="Markdown",
+                pool_timeout=10,
+            )
+
+    @abstractmethod
+    def format_message(self, item):
+        ...
+
+
+class VintedPipeline(ScraperBasePipeline):
     async def process_item(self, item, spider):
         cursor = self.db.cursor()
-        cursor.execute("SELECT id FROM item WHERE id = ?", (item["id"],))
+        cursor.execute("SELECT id FROM vinted_item WHERE id = ?", (item["id"],))
         result = cursor.fetchone()
 
         if result is None:
             cursor.execute(
-                """INSERT INTO item VALUES (
+                """INSERT INTO vinted_item VALUES (
                     :id,
                     :title,
                     :price,
@@ -112,29 +136,17 @@ class ScraperPipeline:
                     "search_tracking_params": str(item["search_tracking_params"]),
                 },
             )
+            cursor.close()
+            await self.send_telegram_notification(
+                spider, item, photo=item["photo"]["url"]
+            )
 
-            if spider.load_db is False:
-                await self.bot.send_photo(
-                    chat_id=self.CHAT_ID,
-                    photo=item["photo"]["url"],
-                    caption=self.format_message(item),
-                    parse_mode="Markdown",
-                    pool_timeout=10,
-                )
-
-        cursor.close()
         return item
 
-    def close_spider(self, spider):
-        self.db.commit()
-        spider.logger.info(f"Inserted {self.db.total_changes} items")
-        self.db.close()
-
     def format_message(self, item):
-        message = f"🛍️ [New Item For Sale!]({item['url']})\n\n"
+        message = f"🛍️ [{item['title']} - {item['currency']} {item['price']}]({item['url']})\n\n"
         message += f"*Brand:* {item['brand_title']}\n"
         message += f"*Favourite Count:* {item['favourite_count']}\n"
-        message += f"*Price:* {item['currency']} {item['price']}\n"
         message += (
             f"*Price With Service Fee:* {item['currency']} {item['total_item_price']}\n"
         )
@@ -143,6 +155,5 @@ class ScraperPipeline:
         )
         message += f"*Size:* {item['size_title']}\n"
         message += f"*Status:* {item['status']}\n"
-        message += f"*Title:* {item['title']}\n"
         message += f"*View Count:* {item['view_count']}\n\n"
         return message
