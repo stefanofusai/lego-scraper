@@ -6,14 +6,14 @@
 
 # useful for handling different item types with a single interface
 
-from abc import abstractmethod
 import os
 import sqlite3
+from abc import abstractmethod
 
 import telegram
 
 
-class ScraperBasePipeline:
+class BasePipeline:
     TOKEN = os.environ.get("TELEGRAM_TOKEN")
     CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
@@ -75,7 +75,7 @@ class ScraperBasePipeline:
         ...
 
 
-class VintedPipeline(ScraperBasePipeline):
+class VintedPipeline(BasePipeline):
     async def process_item(self, item, spider):
         cursor = self.db.cursor()
         cursor.execute("SELECT id FROM vinted_item WHERE id = ?", (item["id"],))

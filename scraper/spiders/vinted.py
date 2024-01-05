@@ -1,11 +1,15 @@
 import scrapy
 
 from scraper.items import VintedItem
+from scraper.pipelines import VintedPipeline
+from scraper.spiders.base import BaseSpider
 
 
-class VintedSpider(scrapy.Spider):
+class VintedSpider(BaseSpider):
     name = "vinted"
+
     allowed_domains = ["vinted.it"]
+    custom_settings = {"ITEM_PIPELINES": {VintedPipeline: 100}}
     start_urls = [
         "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=40539&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first",
         "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=40623&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first",
@@ -24,20 +28,6 @@ class VintedSpider(scrapy.Spider):
         "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=75979&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first",
         "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+star+wars&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first",
     ]
-
-    CUSTOM_SETTINGS = {"ITEM_PIPELINES": {"scraper.pipelines.VintedPipeline": 100}}
-
-    def __init__(self, load_db=False, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        if load_db in {True, "true", "True"}:
-            self.load_db = True
-
-        elif load_db in {False, "false", "False"}:
-            self.load_db = False
-
-        else:
-            raise ValueError("load_db must be either true or false")
 
     def start_requests(self):
         yield scrapy.Request(
