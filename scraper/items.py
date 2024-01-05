@@ -6,6 +6,21 @@
 import scrapy
 
 
+class SubitoItem(scrapy.Item):
+    urn = scrapy.Field()
+    type = scrapy.Field()
+    category = scrapy.Field()
+    subject = scrapy.Field()
+    body = scrapy.Field()
+    dates = scrapy.Field()
+    images = scrapy.Field()
+    images_360 = scrapy.Field()
+    features = scrapy.Field()
+    advertiser = scrapy.Field()
+    geo = scrapy.Field()
+    urls = scrapy.Field()
+
+
 class VintedItem(scrapy.Item):
     id = scrapy.Field()
     title = scrapy.Field()

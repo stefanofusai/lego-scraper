@@ -20,38 +20,14 @@ class BasePipeline:
     def __init__(self):
         self.bot = telegram.Bot(token=self.TOKEN)
         self.db = sqlite3.connect("db.sqlite3")
-
         cursor = self.db.cursor()
         cursor.execute(
-            """CREATE TABLE IF NOT EXISTS vinted_item (
-                id INTEGER NOT NULL PRIMARY KEY,
-                title TEXT NOT NULL,
-                price REAL NOT NULL,
-                is_visible INTEGER NOT NULL,
-                discount TEXT,
-                currency TEXT NOT NULL,
-                brand_title TEXT NOT NULL,
-                user TEXT NOT NULL,
-                url TEXT NOT NULL,
-                promoted INTEGER NOT NULL,
-                photo TEXT NOT NULL,
-                favourite_count INTEGER NOT NULL,
-                is_favourite INTEGER NOT NULL,
-                badge TEXT,
-                conversion TEXT,
-                service_fee REAL NOT NULL,
-                total_item_price REAL NOT NULL,
-                total_item_price_rounded REAL,
-                view_count INTEGER NOT NULL,
-                size_title TEXT NOT NULL,
-                content_source TEXT NOT NULL,
-                status TEXT NOT NULL,
-                icon_badges TEXT NOT NULL,
-                search_tracking_params TEXT NOT NULL
+            """CREATE TABLE IF NOT EXISTS item (
+                site TEXT NOT NULL,
+                id TEXT NOT NULL,
+                data TEXT NOT NULL,
+                PRIMARY KEY (site, id)
             );"""
-        )
-        cursor.execute(
-            "CREATE INDEX IF NOT EXISTS idx_vinted_item_id ON vinted_item (id);"
         )
         cursor.close()
 
@@ -75,76 +51,97 @@ class BasePipeline:
         ...
 
 
-class VintedPipeline(BasePipeline):
+class SubitoPipeline(BasePipeline):
     async def process_item(self, item, spider):
         cursor = self.db.cursor()
-        cursor.execute("SELECT id FROM vinted_item WHERE id = ?", (item["id"],))
+        cursor.execute(
+            "SELECT 1 FROM item where site = ? AND id = ?", ("subito", item["urn"])
+        )
         result = cursor.fetchone()
 
         if result is None:
             cursor.execute(
-                """INSERT INTO vinted_item VALUES (
+                """INSERT INTO item VALUES (
+                    :site,
                     :id,
-                    :title,
-                    :price,
-                    :is_visible,
-                    :discount,
-                    :currency,
-                    :brand_title,
-                    :user,
-                    :url,
-                    :promoted,
-                    :photo,
-                    :favourite_count,
-                    :is_favourite,
-                    :badge,
-                    :conversion,
-                    :service_fee,
-                    :total_item_price,
-                    :total_item_price_rounded,
-                    :view_count,
-                    :size_title,
-                    :content_source,
-                    :status,
-                    :icon_badges,
-                    :search_tracking_params
+                    :data
                 );""",
-                {
-                    "id": item["id"],
-                    "title": item["title"],
-                    "price": item["price"],
-                    "is_visible": item["is_visible"],
-                    "discount": item["discount"],
-                    "currency": item["currency"],
-                    "brand_title": item["brand_title"],
-                    "user": str(item["user"]),
-                    "url": item["url"],
-                    "promoted": item["promoted"],
-                    "photo": str(item["photo"]),
-                    "favourite_count": item["favourite_count"],
-                    "is_favourite": item["is_favourite"],
-                    "badge": item["badge"],
-                    "conversion": item["conversion"],
-                    "service_fee": item["service_fee"],
-                    "total_item_price": item["total_item_price"],
-                    "total_item_price_rounded": item["total_item_price_rounded"],
-                    "view_count": item["view_count"],
-                    "size_title": item["size_title"],
-                    "content_source": item["content_source"],
-                    "status": item["status"],
-                    "icon_badges": str(item["icon_badges"]),
-                    "search_tracking_params": str(item["search_tracking_params"]),
-                },
+                {"site": "subito", "id": item["urn"], "data": str(item)},
+            )
+            cursor.close()
+
+            try:
+                photo = item["images"][0]["scale"][-1]["uri"]
+
+            except IndexError:
+                photo = None
+
+            await self.send_telegram_notification(spider, item, photo=photo)
+
+        return item
+
+    def format_message(self, item):
+        try:
+            price = [x for x in item["features"] if x["label"] == "Prezzo"][0][
+                "values"
+            ][0]["value"]
+
+        except IndexError:
+            price = "N/A"
+
+        try:
+            shipping_fee = [
+                x for x in item["features"] if x["label"] == "Costo della spedizione"
+            ][0]["values"][0]["value"]
+
+        except IndexError:
+            shipping_fee = None
+
+        message = f"🛍️ [Subito.it - {item['subject']} - {price}]({item['urls']['default']})\n\n"
+        message += f"*City:* {item['geo']['city']['value']}\n"
+
+        if shipping_fee is not None:
+            message += f"*Shipping fee:* {shipping_fee}\n"
+
+        return message
+
+
+class VintedPipeline(BasePipeline):
+    async def process_item(self, item, spider):
+        cursor = self.db.cursor()
+        cursor.execute(
+            "SELECT 1 FROM item where site = ? AND id = ?", ("vinted", item["id"])
+        )
+        result = cursor.fetchone()
+
+        if result is None:
+            cursor.execute(
+                """INSERT INTO item VALUES (
+                    :site,
+                    :id,
+                    :data
+                );""",
+                {"site": "vinted", "id": item["id"], "data": str(item)},
             )
             cursor.close()
             await self.send_telegram_notification(
                 spider, item, photo=item["photo"]["url"]
             )
 
+        else:
+            print("Item already exists")
+
         return item
 
     def format_message(self, item):
-        message = f"🛍️ [{item['title']} - {item['currency']} {item['price']}]({item['url']})\n\n"
+        match item["currency"]:
+            case "EUR":
+                currency = "€"
+
+            case _:
+                currency = item["currency"]
+
+        message = f"🛍️ [Vinted - {item['title']} - {currency} {item['price']}]({item['url']})\n\n"
         message += f"*Brand:* {item['brand_title']}\n"
         message += f"*Favourite Count:* {item['favourite_count']}\n"
         message += (
