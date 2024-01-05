@@ -131,12 +131,18 @@ class VintedPipeline(BasePipeline):
         return item
 
     def format_message(self, item):
-        match item["currency"]:
-            case "EUR":
-                currency = "€"
+        # match item["currency"]:
+        #     case "EUR":
+        #         currency = "€"
 
-            case _:
-                currency = item["currency"]
+        #     case _:
+        #         currency = item["currency"]
+
+        if item["currency"] == "EUR":
+            currency = "€"
+
+        else:
+            currency = item["currency"]
 
         message = f"🛍️ [Vinted - {item['title']} - {currency} {item['price']}]({item['url']})\n\n"
         message += f"*Brand:* {item['brand_title']}\n"
