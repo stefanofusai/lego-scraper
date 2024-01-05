@@ -128,9 +128,6 @@ class VintedPipeline(BasePipeline):
                 spider, item, photo=item["photo"]["url"]
             )
 
-        else:
-            print("Item already exists")
-
         return item
 
     def format_message(self, item):
