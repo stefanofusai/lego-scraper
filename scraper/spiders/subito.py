@@ -1,5 +1,4 @@
-from scraper.items import SubitoItem
-from scraper.pipelines import SubitoPipeline
+from scraper.items import Item
 from scraper.spiders.base import BaseSpider
 
 
@@ -7,7 +6,6 @@ class SubitoSpider(BaseSpider):
     name = "subito"
 
     allowed_domains = ["subito.it"]
-    custom_settings = {"ITEM_PIPELINES": {SubitoPipeline: 100}}
     start_urls = [
         "https://www.subito.it/hades/v1/search/items?q=40539&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0&ic=10,20",
         "https://www.subito.it/hades/v1/search/items?q=40623&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0&ic=10,20",
@@ -28,18 +26,36 @@ class SubitoSpider(BaseSpider):
     ]
 
     def parse(self, response):
-        for item in response.json()["ads"]:
-            yield SubitoItem(
-                urn=item["urn"],
-                type=item["type"],
-                category=item["category"],
-                subject=item["subject"],
-                body=item["body"],
-                dates=item["dates"],
-                images=item["images"],
-                images_360=item["images_360"],
-                features=item["features"],
-                advertiser=item["advertiser"],
-                geo=item["geo"],
-                urls=item["urls"],
+        for result in response.json()["ads"]:
+            try:
+                image = result["images"][0]["scale"][-1]["uri"]
+
+            except IndexError:
+                image = None
+
+            try:
+                price = [x for x in result["features"] if x["label"] == "Prezzo"][0][
+                    "values"
+                ][0]["value"]
+
+            except IndexError:
+                continue
+
+            try:
+                condition = [
+                    x for x in result["features"] if x["label"] == "Condizione"
+                ][0]["values"][0]["value"]
+
+            except IndexError:
+                condition = None
+
+            yield Item(
+                site="Subito.it",
+                id=result["urn"],
+                url=result["urls"]["default"],
+                image=image,
+                title=result["subject"],
+                currency="€",
+                price=float(price.replace(" €", "")),
+                condition=condition,
             )
