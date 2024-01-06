@@ -63,10 +63,10 @@ class SubitoSpider(BaseSpider):
             )
 
         if len(response.json()["ads"]) > 0:
-            offset_curr = int(response.url.split("start=")[1].split("&")[0])
+            offset_curr = int(response.url.split("&start=")[1].split("&")[0])
             yield scrapy.Request(
                 response.url.replace(
-                    f"start={offset_curr}", f"start={offset_curr+100}"
+                    f"&start={offset_curr}", f"&start={offset_curr+100}"
                 ),
                 callback=self.parse,
             )

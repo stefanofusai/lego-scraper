@@ -50,8 +50,8 @@ class VintedSpider(BaseSpider):
             )
 
         if len(response.json()["items"]) > 0:
-            page_curr = int(response.url.split("page=")[1].split("&")[0])
+            page_curr = int(response.url.split("?page=")[1].split("&")[0])
             yield scrapy.Request(
-                response.url.replace(f"page={page_curr}", f"page={page_curr+1}"),
+                response.url.replace(f"?page={page_curr}", f"?page={page_curr+1}"),
                 callback=self.parse,
             )
