@@ -29,13 +29,6 @@ class WallapopSpider(BaseSpider):
 
         if len(results) > 0:
             offset_curr = int(response.url.split("&start=")[1].split("&")[0])
-            print(
-                response.url.replace(
-                    f"&start={offset_curr}", f"&start={offset_curr+40}"
-                ).replace(
-                    f"&items_count={offset_curr}", f"&items_count={offset_curr+40}"
-                )
-            )
             yield scrapy.Request(
                 response.url.replace(
                     f"&start={offset_curr}", f"&start={offset_curr+40}"
