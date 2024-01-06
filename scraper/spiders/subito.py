@@ -28,7 +28,9 @@ class SubitoSpider(BaseSpider):
     ]
 
     def parse(self, response):
-        for result in response.json()["ads"]:
+        results = response.json()["ads"]
+
+        for result in results:
             try:
                 image = result["images"][0]["scale"][-1]["uri"]
 
@@ -62,7 +64,7 @@ class SubitoSpider(BaseSpider):
                 condition=condition,
             )
 
-        if len(response.json()["ads"]) > 0:
+        if len(results) > 0:
             offset_curr = int(response.url.split("&start=")[1].split("&")[0])
             yield scrapy.Request(
                 response.url.replace(

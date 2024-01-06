@@ -37,7 +37,9 @@ class VintedSpider(BaseSpider):
             yield scrapy.Request(url, callback=self.parse)
 
     def parse(self, response):
-        for result in response.json()["items"]:
+        results = response.json()["items"]
+
+        for result in results:
             yield Item(
                 site="Vinted",
                 id=result["id"],
@@ -49,7 +51,7 @@ class VintedSpider(BaseSpider):
                 condition=None,
             )
 
-        if len(response.json()["items"]) > 0:
+        if len(results) > 0:
             page_curr = int(response.url.split("?page=")[1].split("&")[0])
             yield scrapy.Request(
                 response.url.replace(f"?page={page_curr}", f"?page={page_curr+1}"),
