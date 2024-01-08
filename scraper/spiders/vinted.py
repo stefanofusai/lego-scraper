@@ -37,7 +37,6 @@ class VintedSpider(BaseSpider):
         "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=75360&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first",
         "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=75361&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first",
         "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=75364&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=1,6&order=newest_first",
     ]
 
     def start_requests(self):

@@ -37,7 +37,6 @@ class SubitoSpider(BaseSpider):
         "https://www.subito.it/hades/v1/search/items?q=75360&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0&ic=10,20",
         "https://www.subito.it/hades/v1/search/items?q=75361&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0&ic=10,20",
         "https://www.subito.it/hades/v1/search/items?q=75364&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0&ic=10,20",
-        "https://www.subito.it/hades/v1/search/items?q=lego&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0&ic=10,20",
     ]
 
     def parse(self, response):

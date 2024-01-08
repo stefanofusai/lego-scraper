@@ -37,7 +37,6 @@ class WallapopSpider(BaseSpider):
         "https://api.wallapop.com/api/v3/general/search?keywords=75360&condition=new,as_good_as_new&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75361&condition=new,as_good_as_new&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75364&condition=new,as_good_as_new&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
-        "https://api.wallapop.com/api/v3/general/search?keywords=lego&condition=new,as_good_as_new&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
     ]
 
     def parse(self, response):
