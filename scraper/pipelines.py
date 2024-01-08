@@ -91,7 +91,7 @@ class ScraperPipeline:
                 },
             )
 
-            if spider.load_db is False:
+            if spider.notify is True:
                 await self.send_telegram_notification(item, reason="New item")
 
         else:
@@ -104,7 +104,7 @@ class ScraperPipeline:
                     (item["price"], item["in_stock"], item["site"], item["id"]),
                 )
 
-                if spider.load_db is False and item["price"] <= price * 0.95:
+                if spider.notify is True and item["price"] <= price * 0.95:
                     if item["in_stock"] is True and in_stock is False:
                         reason = f"Item restocked and price dropped from {currency}{format_price(price)} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - price) / price) * 100, 2))}%"
 
@@ -122,7 +122,7 @@ class ScraperPipeline:
                     (item["in_stock"], item["site"], item["id"]),
                 )
 
-                if spider.load_db is False and item["in_stock"] is True:
+                if spider.notify is True and item["in_stock"] is True:
                     await self.send_telegram_notification(item, reason="Item restocked")
 
         cursor.close()

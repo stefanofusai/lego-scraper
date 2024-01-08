@@ -2,14 +2,14 @@ import scrapy
 
 
 class BaseSpider(scrapy.Spider):
-    def __init__(self, load_db=False, *args, **kwargs):
+    def __init__(self, notify=True, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        if load_db in {True, "true", "True"}:
-            self.load_db = True
+        if notify in {True, "true", "True"}:
+            self.notify = True
 
-        elif load_db in {False, "false", "False"}:
-            self.load_db = False
+        elif notify in {False, "false", "False"}:
+            self.notify = False
 
         else:
-            raise ValueError("load_db must be either true or false")
+            raise ValueError("notify must be either true or false")
