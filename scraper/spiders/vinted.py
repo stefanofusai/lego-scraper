@@ -62,6 +62,7 @@ class VintedSpider(BaseSpider):
                 currency="€",
                 price=float(result["price"]),
                 condition=None,
+                in_stock=True,
             )
 
         if len(results) > 0:

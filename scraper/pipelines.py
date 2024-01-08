@@ -32,6 +32,7 @@ class ScraperPipeline:
                 currency TEXT NOT NULL,
                 price REAL NOT NULL,
                 condition TEXT,
+                in_stock BOOLEAN,
                 PRIMARY KEY (site, id)
             );"""
         )
@@ -53,7 +54,8 @@ class ScraperPipeline:
                 title,
                 currency,
                 price,
-                CONDITION
+                condition,
+                in_stock
             FROM
                 item
             WHERE
@@ -73,7 +75,8 @@ class ScraperPipeline:
                     :title,
                     :currency,
                     :price,
-                    :condition
+                    :condition,
+                    :in_stock
                 );""",
                 {
                     "site": item["site"],
@@ -84,23 +87,43 @@ class ScraperPipeline:
                     "currency": item["currency"],
                     "price": item["price"],
                     "condition": item["condition"],
+                    "in_stock": item["in_stock"],
                 },
             )
 
             if spider.load_db is False:
                 await self.send_telegram_notification(item, reason="New item")
 
-        elif row[6] != item["price"]:
+        elif item["price"] != row[6]:
             cursor.execute(
-                "UPDATE item SET price = ? WHERE site = ? AND id = ?",
-                (item["price"], item["site"], item["id"]),
+                "UPDATE item SET price = ?, in_stock = ? WHERE site = ? AND id = ?;",
+                (item["price"], item["in_stock"], item["site"], item["id"]),
             )
 
             if spider.load_db is False and item["price"] <= row[6] * 0.95:
-                await self.send_telegram_notification(
-                    item,
-                    reason=f"Price changed from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%",
-                )
+                if item["in_stock"] is True and row[8] is False:
+                    reason = (
+                        f"Item restocked and price dropped from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%",
+                    )
+
+                elif item["in_stock"] is False and row[8] is True:
+                    reason = f"Item sold out and price dropped from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%"
+
+                else:
+                    reason = (
+                        f"Price dropped from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%",
+                    )
+
+                await self.send_telegram_notification(item, reason=reason)
+
+        elif item["in_stock"] != row[8]:
+            cursor.execute(
+                "UPDATE item SET in_stock = ? WHERE site = ? AND id = ?;",
+                (item["in_stock"], item["site"], item["id"]),
+            )
+
+            if spider.load_db is False and item["in_stock"] is True:
+                await self.send_telegram_notification(item, reason="Item restocked")
 
         cursor.close()
         return item

@@ -75,6 +75,7 @@ class SubitoSpider(BaseSpider):
                 currency="€",
                 price=float(price.replace(" €", "")),
                 condition=condition,
+                in_stock=True,
             )
 
         if len(results) > 0:

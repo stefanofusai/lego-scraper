@@ -15,3 +15,4 @@ class Item(scrapy.Item):
     currency = scrapy.Field()
     price = scrapy.Field()
     condition = scrapy.Field()
+    in_stock = scrapy.Field()
