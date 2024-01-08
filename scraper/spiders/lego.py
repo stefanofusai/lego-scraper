@@ -10,6 +10,7 @@ class SubitoSpider(BaseSpider):
     allowed_domains = ["lego.com"]
     start_urls = [
         "https://www.lego.com/it-it/product/ahsoka-tano-40539",
+        "https://www.lego.com/it-it/product/tusken-raider-40615",
         "https://www.lego.com/it-it/product/battle-of-endor-heroes-40623",
         "https://www.lego.com/it-it/product/alex-40624",
         "https://www.lego.com/it-it/product/llama-40625",
@@ -19,17 +20,22 @@ class SubitoSpider(BaseSpider):
         "https://www.lego.com/it-it/product/darth-vader-helmet-75304",
         "https://www.lego.com/it-it/product/boba-fett-s-starship-75312",
         "https://www.lego.com/it-it/product/snowtrooper-battle-pack-75320",
+        "https://www.lego.com/it-it/product/mos-eisley-cantina-75290",
         "https://www.lego.com/it-it/product/obi-wan-kenobi-s-jedi-starfighter-75333",
         "https://www.lego.com/it-it/product/501st-clone-troopers-battle-pack-75345",
         "https://www.lego.com/it-it/product/tie-bomber-75347",
         "https://www.lego.com/it-it/product/mandalorian-fang-fighter-vs-tie-interceptor-75348",
+        "https://www.lego.com/it-it/product/clone-commander-cody-helmet-75350",
+        "https://www.lego.com/it-it/product/princess-leia-boushh-helmet-75351",
         "https://www.lego.com/it-it/product/emperor-s-throne-room-diorama-75352",
         "https://www.lego.com/it-it/product/endor-speeder-chase-diorama-75353",
+        "https://www.lego.com/it-it/product/coruscant-guard-gunship-75354",
         "https://www.lego.com/it-it/product/executor-super-star-destroyer-75356",
         "https://www.lego.com/it-it/product/tdb-lsw-2023-16-75359",
         "https://www.lego.com/it-it/product/yoda-s-jedi-starfighter-75360",
         "https://www.lego.com/it-it/product/spider-tank-75361",
         "https://www.lego.com/it-it/product/new-republic-e-wing-vs-shin-hati-s-starfighter-75364",
+        "https://www.lego.com/it-it/product/boba-fett-mech-75369",
     ]
 
     def start_requests(self):

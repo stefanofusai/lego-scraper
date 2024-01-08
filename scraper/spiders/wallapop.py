@@ -10,10 +10,12 @@ class WallapopSpider(BaseSpider):
     allowed_domains = ["wallapop.com"]
     start_urls = [
         "https://api.wallapop.com/api/v3/general/search?keywords=40539&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
+        "https://api.wallapop.com/api/v3/general/search?keywords=40615&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=40623&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=40624&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=40625&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=40626&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
+        "https://api.wallapop.com/api/v3/general/search?keywords=75290&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75300&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75301&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75304&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
@@ -30,13 +32,17 @@ class WallapopSpider(BaseSpider):
         "https://api.wallapop.com/api/v3/general/search?keywords=75345&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75347&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75348&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
+        "https://api.wallapop.com/api/v3/general/search?keywords=75350&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
+        "https://api.wallapop.com/api/v3/general/search?keywords=75351&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75352&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75353&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
+        "https://api.wallapop.com/api/v3/general/search?keywords=75354&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75356&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75359&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75360&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75361&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
         "https://api.wallapop.com/api/v3/general/search?keywords=75364&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
+        "https://api.wallapop.com/api/v3/general/search?keywords=75369&start=0&items_count=0&filters_source=quick_filters&order_by=newest&step=0",
     ]
 
     def parse(self, response):

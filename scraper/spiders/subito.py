@@ -10,10 +10,12 @@ class SubitoSpider(BaseSpider):
     allowed_domains = ["subito.it"]
     start_urls = [
         "https://www.subito.it/hades/v1/search/items?q=40539&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
+        "https://www.subito.it/hades/v1/search/items?q=40615&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=40623&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=40624&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=40625&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=40626&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
+        "https://www.subito.it/hades/v1/search/items?q=75290&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75300&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75301&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75304&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
@@ -30,13 +32,17 @@ class SubitoSpider(BaseSpider):
         "https://www.subito.it/hades/v1/search/items?q=75345&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75347&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75348&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
+        "https://www.subito.it/hades/v1/search/items?q=75350&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
+        "https://www.subito.it/hades/v1/search/items?q=75351&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75352&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75353&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
+        "https://www.subito.it/hades/v1/search/items?q=75354&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75356&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75359&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75360&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75361&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
         "https://www.subito.it/hades/v1/search/items?q=75364&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
+        "https://www.subito.it/hades/v1/search/items?q=75369&c=21&t=s&qso=false&shp=true&urg=false&sort=datedesc&lim=100&start=0",
     ]
 
     def parse(self, response):
