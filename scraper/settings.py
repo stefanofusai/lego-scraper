@@ -55,9 +55,12 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    "scraper.middlewares.ScraperDownloaderMiddleware": 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+    "scrapy.downloadermiddlewares.useragent.UserAgentMiddleware": None,
+    "scrapy.downloadermiddlewares.retry.RetryMiddleware": None,
+    "scrapy_fake_useragent.middleware.RandomUserAgentMiddleware": 400,
+    "scrapy_fake_useragent.middleware.RetryUserAgentMiddleware": 401,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -94,3 +97,10 @@ ITEM_PIPELINES = {"scraper.pipelines.ScraperPipeline": 100}
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+FAKEUSERAGENT_PROVIDERS = [
+    "scrapy_fake_useragent.providers.FakeUserAgentProvider",
+    "scrapy_fake_useragent.providers.FakerProvider",
+    "scrapy_fake_useragent.providers.FixedUserAgentProvider",
+]
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
