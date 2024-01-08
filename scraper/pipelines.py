@@ -64,6 +64,8 @@ class ScraperPipeline:
             (item["site"], item["id"]),
         )
         row = cursor.fetchone()
+        site, id, url, image, title, currency, price, condition, _in_stock = row
+        in_stock = bool(_in_stock)
 
         if row is None:
             cursor.execute(
@@ -94,25 +96,25 @@ class ScraperPipeline:
             if spider.load_db is False:
                 await self.send_telegram_notification(item, reason="New item")
 
-        elif item["price"] != row[6]:
+        elif item["price"] != price:
             cursor.execute(
                 "UPDATE item SET price = ?, in_stock = ? WHERE site = ? AND id = ?;",
                 (item["price"], item["in_stock"], item["site"], item["id"]),
             )
 
-            if spider.load_db is False and item["price"] <= row[6] * 0.95:
-                if item["in_stock"] is True and row[8] is False:
-                    reason = f"Item restocked and price dropped from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%"
+            if spider.load_db is False and item["price"] <= price * 0.95:
+                if item["in_stock"] is True and in_stock is False:
+                    reason = f"Item restocked and price dropped from {currency}{format_price(price)} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - price) / price) * 100, 2))}%"
 
-                elif item["in_stock"] is False and row[8] is True:
-                    reason = f"Item sold out and price dropped from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%"
+                elif item["in_stock"] is False and in_stock is True:
+                    reason = f"Item sold out and price dropped from {currency}{format_price(price)} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - price) / price) * 100, 2))}%"
 
                 else:
-                    reason = f"Price dropped from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%"
+                    reason = f"Price dropped from {currency}{format_price(price)} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - price) / price) * 100, 2))}%"
 
                 await self.send_telegram_notification(item, reason=reason)
 
-        elif item["in_stock"] != row[8]:
+        elif item["in_stock"] != in_stock:
             cursor.execute(
                 "UPDATE item SET in_stock = ? WHERE site = ? AND id = ?;",
                 (item["in_stock"], item["site"], item["id"]),
