@@ -1,88 +1,100 @@
-import scrapy
+from scrapy.http import FormRequest
 
 from scraper.items import Item
 from scraper.spiders.base import BaseSpider
 
 
-class VintedSpider(BaseSpider):
-    name = "vinted"
+class VendiloShopSpider(BaseSpider):
+    name = "vendiloshop"
 
-    allowed_domains = ["vinted.it"]
+    allowed_domains = ["sniperfast.com"]
     start_urls = [
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+40539&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+40615&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+40623&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+40624&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+40625&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+40626&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75290&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75300&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75301&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75304&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75312&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75320&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75323&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75324&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75327&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75329&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75330&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75333&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75336&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75342&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75345&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75347&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75348&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75350&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75351&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75352&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75353&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75354&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75356&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75359&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75360&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75361&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75364&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
-        "https://www.vinted.it/api/v2/catalog/items?page=1&per_page=960&search_text=lego+75369&catalog_ids=&color_ids=&brand_ids=&size_ids=&material_ids=&video_game_rating_ids=&status_ids=&order=newest_first",
+        "40539",
+        "40615",
+        "40623",
+        "40624",
+        "40625",
+        "40626",
+        "75290",
+        "75300",
+        "75301",
+        "75304",
+        "75312",
+        "75320",
+        "75323",
+        "75324",
+        "75327",
+        "75329",
+        "75330",
+        "75333",
+        "75336",
+        "75342",
+        "75345",
+        "75347",
+        "75348",
+        "75350",
+        "75351",
+        "75352",
+        "75353",
+        "75354",
+        "75356",
+        "75359",
+        "75360",
+        "75361",
+        "75364",
+        "75369",
     ]
 
     def start_requests(self):
-        yield scrapy.Request(
-            "https://www.vinted.it/catalog",
-            callback=self._start_requests,
-            headers={
-                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            },
-        )
-
-    def _start_requests(self, response):
         for url in self.start_urls:
-            yield scrapy.Request(
-                url,
-                callback=self.parse,
-                headers={
-                    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            yield FormRequest(
+                "https://api.sniperfast.com/search",
+                formdata={
+                    "key": "26d868-4d8dda-4d40ea-d98082-9a6c33",
+                    "name": "index_vndshp",
+                    "sort": "rel",
+                    "sort_num": "100",
+                    "sort_page": "1",
+                    "input[user_input]": url,
+                    "input[cat1]": "",
+                    "input[cat2]": "",
+                    "input[cat3]": "",
+                    "input[cat4]": "",
+                    "filters[manufacturer]": "",
+                    "filters[manufacturer_count]": "10",
+                    "filters[price][min]": "0",
+                    "filters[price][max]": "0",
+                    "filters[price][low]": "",
+                    "filters[price][high]": "",
+                    "last_change": "",
+                    "customer": "0_1",
+                    "apiv": "2",
+                    "sniper_session": "t9s67nf8jnrdtg8bobt2hjud6s",
                 },
+                callback=self.parse,
+                cb_kwargs={"url": url},
             )
 
-    def parse(self, response):
-        results = response.json()["items"]
+    def parse(self, response, url):
+        try:
+            for result in response.json()["result"]:
+                if url in result["name"][0]:
+                    break
 
-        for result in results:
-            yield Item(
-                site="Vinted",
-                id=result["id"],
-                url=result["url"],
-                image=result["photo"]["url"],
-                title=result["title"],
-                currency="€",
-                price=float(result["price"]),
-                condition=None,
-                in_stock=True,
-            )
+            else:
+                return
 
-        # if len(results) > 0:
-        #     page_curr = int(response.url.split("?page=")[1].split("&")[0])
-        #     yield scrapy.Request(
-        #         response.url.replace(f"?page={page_curr}", f"?page={page_curr+1}"),
-        #         callback=self.parse,
-        #     )
+        except KeyError:
+            return
+
+        yield Item(
+            site="Vendilo Shop",
+            id=result["id"],
+            url=result["url"],
+            image=result["img"],
+            title=result["name"][0],
+            currency="€",
+            price=float(result["price"].replace(",", ".")),
+            condition=None,
+            in_stock=result["quantity"] > 0,
+        )
