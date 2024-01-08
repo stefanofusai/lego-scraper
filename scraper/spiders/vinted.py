@@ -47,12 +47,22 @@ class VintedSpider(BaseSpider):
 
     def start_requests(self):
         yield scrapy.Request(
-            "https://www.vinted.it/catalog", callback=self._start_requests
+            "https://www.vinted.it/catalog",
+            callback=self._start_requests,
+            headers={
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
         )
 
     def _start_requests(self, response):
         for url in self.start_urls:
-            yield scrapy.Request(url, callback=self.parse)
+            yield scrapy.Request(
+                url,
+                callback=self.parse,
+                headers={
+                    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+                },
+            )
 
     def parse(self, response):
         results = response.json()["items"]
