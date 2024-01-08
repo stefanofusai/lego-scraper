@@ -122,8 +122,16 @@ class ScraperPipeline:
                     (item["in_stock"], item["site"], item["id"]),
                 )
 
-                if spider.notify is True and item["in_stock"] is True:
-                    await self.send_telegram_notification(item, reason="Item restocked")
+                if spider.notify is True:
+                    if item["in_stock"] is True:
+                        await self.send_telegram_notification(
+                            item, reason="Item restocked"
+                        )
+
+                    else:
+                        await self.send_telegram_notification(
+                            item, reason="Item sold out"
+                        )
 
         cursor.close()
         return item
