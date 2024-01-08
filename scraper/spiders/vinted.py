@@ -70,9 +70,9 @@ class VintedSpider(BaseSpider):
                 in_stock=True,
             )
 
-        if len(results) > 0:
-            page_curr = int(response.url.split("?page=")[1].split("&")[0])
-            yield scrapy.Request(
-                response.url.replace(f"?page={page_curr}", f"?page={page_curr+1}"),
-                callback=self.parse,
-            )
+        # if len(results) > 0:
+        #     page_curr = int(response.url.split("?page=")[1].split("&")[0])
+        #     yield scrapy.Request(
+        #         response.url.replace(f"?page={page_curr}", f"?page={page_curr+1}"),
+        #         callback=self.parse,
+        #     )
