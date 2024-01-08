@@ -11,6 +11,8 @@ import sqlite3
 
 import telegram
 
+from scraper.utils import format_price
+
 
 class ScraperPipeline:
     TOKEN = os.environ.get("TELEGRAM_TOKEN")
@@ -59,9 +61,9 @@ class ScraperPipeline:
                 AND id = ?;""",
             (item["site"], item["id"]),
         )
-        result = cursor.fetchone()
+        row = cursor.fetchone()
 
-        if result is None:
+        if row is None:
             cursor.execute(
                 """INSERT INTO item VALUES (
                     :site,
@@ -88,40 +90,31 @@ class ScraperPipeline:
             if spider.load_db is False:
                 await self.send_telegram_notification(item, reason="New item")
 
-        elif result[6] != item["price"]:
+        elif row[6] != item["price"]:
             cursor.execute(
                 "UPDATE item SET price = ? WHERE site = ? AND id = ?",
                 (item["price"], item["site"], item["id"]),
             )
 
-            if spider.load_db is False:
+            if spider.load_db is False and item["price"] <= row[6] * 0.95:
                 await self.send_telegram_notification(
                     item,
-                    reason=f"Price changed from {result[5]}{result[6]} to {item['currency']}{item['price']}",
+                    reason=f"Price changed from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%",
                 )
 
         cursor.close()
-
         return item
 
     async def send_telegram_notification(self, item, *, reason):
         caption = f"{reason}: [{item['title']}]({item['url']})\n"
         caption += "```\n"
         caption += f"Site: {item['site']}\n"
-
-        if int(item["price"]) == item["price"]:
-            price = int(item["price"])
-
-        else:
-            price = item["price"]
-
-        caption += f"Price: {item['currency']}{price}\n"
+        caption += f"Price: {item['currency']}{format_price(item['price'])}\n"
 
         if item["condition"] is not None:
             caption += f"Condition: {item['condition']}\n"
 
         caption += "```"
-
         await self.bot.send_photo(
             chat_id=self.CHAT_ID,
             photo=item["image"],
