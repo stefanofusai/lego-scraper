@@ -136,10 +136,20 @@ class ScraperPipeline:
             caption += f"Condition: {item['condition']}\n"
 
         caption += "```"
-        await self.bot.send_photo(
-            chat_id=self.CHAT_ID,
-            photo=item["image"],
-            caption=caption,
-            parse_mode="Markdown",
-            pool_timeout=10,
-        )
+
+        try:
+            await self.bot.send_photo(
+                chat_id=self.CHAT_ID,
+                photo=item["image"],
+                caption=caption,
+                parse_mode="Markdown",
+                pool_timeout=10,
+            )
+
+        except telegram.error.BadRequest:
+            await self.bot.send_message(
+                chat_id=self.CHAT_ID,
+                text=caption,
+                parse_mode="Markdown",
+                pool_timeout=10,
+            )
