@@ -66,7 +66,7 @@ class SubitoSpider(BaseSpider):
                 condition = None
 
             yield Item(
-                site="Subito.it",
+                site="Subito",
                 id=result["urn"],
                 url=result["urls"]["default"],
                 image=image,
