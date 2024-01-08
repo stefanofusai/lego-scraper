@@ -6,7 +6,7 @@
 #
 anyio==4.2.0
     # via httpx
-attrs==23.1.0
+attrs==23.2.0
     # via
     #   automat
     #   service-identity
@@ -66,7 +66,7 @@ jmespath==1.0.1
     # via
     #   itemloaders
     #   parsel
-lxml==4.9.4
+lxml==5.1.0
     # via
     #   parsel
     #   scrapy
