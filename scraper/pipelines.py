@@ -102,17 +102,13 @@ class ScraperPipeline:
 
             if spider.load_db is False and item["price"] <= row[6] * 0.95:
                 if item["in_stock"] is True and row[8] is False:
-                    reason = (
-                        f"Item restocked and price dropped from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%",
-                    )
+                    reason = f"Item restocked and price dropped from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%"
 
                 elif item["in_stock"] is False and row[8] is True:
                     reason = f"Item sold out and price dropped from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%"
 
                 else:
-                    reason = (
-                        f"Price dropped from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%",
-                    )
+                    reason = f"Price dropped from {row[5]}{format_price(row[6])} to {item['currency']}{format_price(item['price'])} by {format_price(round(((item['price'] - row[6]) / row[6]) * 100, 2))}%"
 
                 await self.send_telegram_notification(item, reason=reason)
 
