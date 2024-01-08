@@ -4,7 +4,7 @@ from scraper.items import Item
 from scraper.spiders.base import BaseSpider
 
 
-class SubitoSpider(BaseSpider):
+class LegoSpider(BaseSpider):
     name = "lego"
 
     allowed_domains = ["lego.com"]
